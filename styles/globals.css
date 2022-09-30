@@ -1,4 +1,16 @@
 html,
+
+:root {
+  --primary: #F7941C;
+  --second: #262626;
+  --complement: #E7ECEF;
+  --secondcomplement: #F9F9F9;
+  --seccomplementdark: #a8a8a8;
+  --golden: #ffd700;
+  --silver: #C0C0C0;
+  --bronze: #824A02;
+}
+
 body {
   padding: 0;
   margin: 0;
@@ -19,6 +31,7 @@ a {
   html {
     color-scheme: dark;
   }
+
   body {
     color: white;
     background: black;
