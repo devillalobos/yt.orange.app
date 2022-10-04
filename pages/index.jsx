@@ -6,8 +6,9 @@ import bundle from '../i18n';
 import VideoCarouselContainer from '../components/VideoCarouselContainer';
 import NotFound from '../components/NotFound';
 
-export default function Home({ recent, searchText }) {
+export default function Home({ release, recent, searchText }) {
 
+    const [release_videos] = useState(release);
     const [recent_videos] = useState(recent);
     const [filtered_videos, setFilteredVideos] = useState([]);
     const [text, setText] = useState("");
@@ -52,19 +53,24 @@ export default function Home({ recent, searchText }) {
                         /> : <></>
                     }
                     {filtered_videos.length !== 0 ?
-                        <VideoCarouselContainer videos={filtered_videos} title={bundle.getText("component.carousel.title.filtered")} />
+                        <VideoCarouselContainer videos={filtered_videos} title={bundle.getText("component.carousel.title.recent")} />
                         : <NotFound />
                     }
                 </>
                 :
-                <VideoCarouselContainer videos={recent_videos} title={bundle.getText("component.carousel.title.added")} />
+                <>
+                    <VideoCarouselContainer videos={release_videos} title={bundle.getText("component.carousel.title.recent")} />
+                    <VideoCarouselContainer videos={recent_videos} title={bundle.getText("component.carousel.title.added")} />
+                </>
             }
         </div>
     )
 }
 export async function getServerSideProps() {
     let sPath = "https://adult-orange-api.herokuapp.com";
-    const recent_data = await fetch(`${sPath}/api/v2/videos/release`);
+    const release_data = await fetch(`${sPath}/api/v2/videos/release`);
+    const release = await release_data.json();
+    const recent_data = await fetch(`${sPath}/api/v2/videos/recent`);
     const recent = await recent_data.json();
-    return { props: { recent: recent.results } };
+    return { props: { release: release.results, recent: recent.results } };
 }
