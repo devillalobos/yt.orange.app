@@ -1,6 +1,42 @@
 {
-    "page.home.head.title": "Free Porn Videos & Sex Movies - Porno, XXX | YT Naranja",
+    "page.home.head.title": "Free Porn Videos & Sex Movies - Porno, XXX",
     "page.home.head.description": "YT Naranja is the world’s leading free porn site. Choose from millions of hardcore videos that stream quickly and in high quality. The largest adult site on the Internet just keeps getting better. We have more pornstars and real amateurs than anyone else. It’s fast, it’s free, it’s YT Naranja!",
-    
-    "component.card.type.advertisement": "Advertisement"
+    "page.home.title": "Title",
+
+    "component.navbar.menu.search.placeholder": "Search on YT Naranja",
+    "component.navbar.menu.channel": "Channels",
+
+    "component.navbar.menu.stars": "Stars",
+    "component.navbar.menu.stars.hot": "Hot",
+    "component.navbar.menu.stars.view": "View",
+    "component.navbar.menu.stars.like": "Like",
+    "component.navbar.menu.scenes": "Scenes",
+    "component.navbar.menu.scenes.hot": "Hot",
+    "component.navbar.menu.scenes.view": "View",
+    "component.navbar.menu.scenes.like": "Like",
+    "component.navbar.button.random": "Random video",
+    "component.navbar.button.sell": "Sell your Car",
+    "component.navbar.button.signup": "Sign Up",
+    "component.navbar.menu.lang": "Language",
+    "component.navbar.lang.menu.es": "Spanish",
+    "component.navbar.lang.menu.en": "English",
+    "component.card.type.advertisement": "Advertisement",
+    "component.card.type.normal": "Video",
+    "component.carousel.title.hot": "Hot videos",
+    "component.carousel.title.added": "Recently added videos",
+    "component.carousel.title.popular": "Popular videos",
+    "component.carousel.title.recent": "Recent videos",
+    "component.carousel.title.filtered": "Filter videos",
+    "component.not.found.title": "We haven't found any video with that search",
+    "component.card.metadata.view": "views",
+    "component.video.carousel.see.all": "See all",
+
+    "page.star.description.title": "Description",
+    "page.star.tags.title": "Tags",
+    "page.star.lastest.video": "Latest Videos",
+    "page.star.top.video": "Top Videos",
+    "page.star.head.title": "Porn Videos",
+
+    "page.channel.head.title": "Channel",
+    "page.channel.head.free": "Free Porn Videos"
 }

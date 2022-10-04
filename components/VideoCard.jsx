@@ -30,6 +30,7 @@ const FramePictureImage = styled.div`
 `;
 
 const Badge = styled.div`
+    overflow: hidden;
     border-radius: 2px;
     border: 2px solid ${({ type }) => (type === 'advertisement' ? 'var(--primary)' : 'var(--second)')};
     background-color: ${({ type }) => (type === 'advertisement' ? 'var(--primary)' : 'var(--second)')};
@@ -109,13 +110,14 @@ const VideoName = styled.p`
     margin: 0;
     text-align: left;
     margin: auto;
+    color: var(--secondcomplement);
     cursor: pointer;
 `;
 
 const Date = styled.div`
     grid-area: Date / Date / Date / Date;
     place-self: center end;
-    color: rgb(214, 214, 214);
+    color: var(--secondcomplement);
     font-size: 0.8125rem;
     display: flex;
     flex-wrap: wrap;
@@ -128,12 +130,11 @@ const Name = styled.div`
     grid-area: Title / Title / Title / Title;
     overflow: hidden;
     font-size: 0.8125rem;
-    margin-bottom: 6px;
     flex-wrap: wrap;
     -webkit-box-pack: justify;
     color: var(--complement) !important;
     text-overflow: ellipsis;
-    overflow:hidden;
+    overflow: hidden;
     display: -webkit-box !important;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
@@ -168,6 +169,45 @@ const StarsContainer = styled.div`
     }
 `;
 
+const ContainerAnimated = styled.div`
+    color: #fff;
+    animation: backAndForth 5s linear infinite;
+    display: inline-block;
+    position: relative;
+    height: 30px;
+    flex-direction: column;
+    @keyframes backAndForth {
+        0% {
+        transform: translateX(0);
+        left(0);
+    }
+    10% {
+        transform: translateX(0);
+        left: 0;
+    }
+    45% {
+        transform: translateX(calc(-100%));
+        left: 100%;
+    }
+    55% {
+        transform: translateX(calc(-100%));
+        left: 100%;
+    }
+    90% {
+        transform: translateX(0);
+        left: 0;
+    }
+    100% {
+        transform: translateX(0);
+        left: 0;
+    }
+}
+`;
+
+
+
+
+
 const ProfileImage = styled.div`
     display: flex;
     border-radius: 80%;
@@ -183,13 +223,13 @@ const FramePicture = styled.div`
 
 const ObjectImage = styled.div`
     display: flex;
-    background-color: var(--second);
     border-radius: 50%;
 `;
 
 const ImageBackgroundTest = styled.img`
     margin-left: 5px;
-    background-color: var(--second);
+    margin-right: 5px;
+    background-color: var(--background);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
     object-fit:  ${({ type }) => (type === 'channel' ? 'contain' : 'cover')};
     width: 30px !important;
@@ -203,6 +243,13 @@ const StarName = styled.p`
     margin: auto;
     width: 50%;
     cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    color: var(--complement);
+    font-size: 10px;
     &:hover {
         color: var(--primary);
     }
@@ -331,7 +378,7 @@ const VideoCard = ({ id, name, type, release_date, thumbnail_gif, thumbnail, sta
                         {bundle.getText("component.card.type." + type)}
                     </Badge>
                 </FramePictureImage>
-                {platform === "iPhone" ? <IOSImageBackground muted playsinline loop autoPlay visible={!hover} preload="metadata" src={thumbnail_gif} /> :
+                {platform === "iPhone" ? <IOSImageBackground playsinline loop autoPlay visible={!hover} preload="metadata" src={thumbnail_gif} /> :
                     <VideoBackground muted playsinline autoPlay loop preload="none" onClick={handleclick} visible={!hover} onMouseEnter={handleVideoMouseEnter} onMouseLeave={handleVideoMouseLeave}
                         src={thumbnail_gif} type="video/mp4" />
                 }
@@ -353,26 +400,28 @@ const VideoCard = ({ id, name, type, release_date, thumbnail_gif, thumbnail, sta
                     </Date>
                     <Name>
                         <Info>
-                            <StarsContainer>
-                                {stars && stars.length !== 0 ? stars.map((star) => (
-                                    <StyledLink key={star.id}
-                                        href={{
-                                            pathname: `/stars/[star]`,
-                                            query: { star: star.id },
-                                        }}>
-                                        <ProfileImage>
-                                            <FramePicture>
-                                                <ObjectImage>
-                                                    <ImageBackgroundTest loading="lazy" src={star.thumbnail} title={star.name} />
-                                                    <StarName>
-                                                        {star.name}
-                                                    </StarName>
-                                                </ObjectImage>
-                                            </FramePicture>
-                                        </ProfileImage>
-                                    </StyledLink>
-                                )) : []}
-                            </StarsContainer>
+                            <ContainerAnimated>
+                                <StarsContainer>
+                                    {stars && stars.length !== 0 ? stars.map((star) => (
+                                        <StyledLink key={star.id}
+                                            href={{
+                                                pathname: `/stars/[star]`,
+                                                query: { star: star.id },
+                                            }}>
+                                            <ProfileImage>
+                                                <FramePicture>
+                                                    <ObjectImage>
+                                                        <ImageBackgroundTest loading="lazy" src={star.thumbnail} title={star.name} />
+                                                        <StarName>
+                                                            {star.name}
+                                                        </StarName>
+                                                    </ObjectImage>
+                                                </FramePicture>
+                                            </ProfileImage>
+                                        </StyledLink>
+                                    )) : []}
+                                </StarsContainer>
+                            </ContainerAnimated>
                         </Info>
                     </Name>
                     <Data>
@@ -388,7 +437,7 @@ const VideoCard = ({ id, name, type, release_date, thumbnail_gif, thumbnail, sta
                                 <StyledLink
                                     href={{
                                         pathname: `/channels/[channel]`,
-                                        query: { channel: owners[0].company },
+                                        query: { channel: owners.length && owners[0].company },
                                     }}>
                                     <StarName>
                                         {owners.length && owners[0].name}

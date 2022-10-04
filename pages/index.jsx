@@ -1,10 +1,40 @@
+import { useState } from 'react';
+import { BarLoader } from 'react-spinners'
 import Head from 'next/head'
-import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-import Main from './main'
 import bundle from '../i18n';
+import VideoCarouselContainer from '../components/VideoCarouselContainer';
+import NotFound from '../components/NotFound';
 
-export default function Home({ recent }) {
+export default function Home({ recent, searchText }) {
+
+    const [recent_videos] = useState(recent);
+    const [filtered_videos, setFilteredVideos] = useState([]);
+    const [text, setText] = useState("");
+    const [showFilter, setFilter] = useState(false);
+    const [showLoding, setLoading] = useState(false);
+
+    const filter_videos = async () => {
+        try {
+            setLoading(true);
+            let sPath = "https://adult-orange-api.herokuapp.com";
+            setText(searchText);
+            const recent_data = await fetch(`${sPath}/api/v2/videos/release?$filter=name%20cs%20${searchText}`);
+            const recent_data_json = await recent_data.json();
+            setFilteredVideos(recent_data_json.results);
+            setLoading(false);
+        } catch (error) {
+            alert(error.message);
+        }
+    }
+    if (searchText.length > 3 && searchText !== text) {
+        setFilter(true);
+        filter_videos();
+    } else if (searchText.length === 0 && text !== "") {
+        setText(searchText);
+        setFilter(false);
+    }
+
     return (
         <div className={styles.container}>
             <Head>
@@ -12,68 +42,29 @@ export default function Home({ recent }) {
                 <meta name="description" content={bundle.getText("page.home.head.description")} />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <Main videos={recent} />
-
-            <main className={styles.main}>
-                <h1 className={styles.title}>
-                    Welcome to <a href="https://nextjs.org">Next.js!</a>
-                </h1>
-
-                <p className={styles.description}>
-                    Get started by editing{' '}
-                    <code className={styles.code}>pages/index.js</code>
-                </p>
-
-                <div className={styles.grid}>
-                    <a href="https://nextjs.org/docs" className={styles.card}>
-                        <h2>Documentation &rarr;</h2>
-                        <p>Find in-depth information about Next.js features and API.</p>
-                    </a>
-
-                    <a href="https://nextjs.org/learn" className={styles.card}>
-                        <h2>Learn &rarr;</h2>
-                        <p>Learn about Next.js in an interactive course with quizzes!</p>
-                    </a>
-
-                    <a
-                        href="https://github.com/vercel/next.js/tree/canary/examples"
-                        className={styles.card}
-                    >
-                        <h2>Examples &rarr;</h2>
-                        <p>Discover and deploy boilerplate example Next.js projects.</p>
-                    </a>
-
-                    <a
-                        href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-                        className={styles.card}
-                    >
-                        <h2>Deploy &rarr;</h2>
-                        <p>
-                            Instantly deploy your Next.js site to a public URL with Vercel.
-                        </p>
-                    </a>
-                </div>
-
-            </main>
-
-            <footer className={styles.footer}>
-                <a
-                    href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    Powered by{' '}
-                    <span className={styles.logo}>
-                        <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-                    </span>
-                </a>
-            </footer>
+            {showFilter ?
+                <>
+                    {showLoding ?
+                        <BarLoader
+                            width="100%"
+                            color="var(--primary)"
+                            size={80}
+                        /> : <></>
+                    }
+                    {filtered_videos.length !== 0 ?
+                        <VideoCarouselContainer videos={filtered_videos} title={bundle.getText("component.carousel.title.filtered")} />
+                        : <NotFound />
+                    }
+                </>
+                :
+                <VideoCarouselContainer videos={recent_videos} title={bundle.getText("component.carousel.title.added")} />
+            }
         </div>
     )
 }
 export async function getServerSideProps() {
     let sPath = "https://adult-orange-api.herokuapp.com";
-    const recent_data = await fetch(`${sPath}/api/v2/videos?$expand=Stars,Owner&$limit=8&$recent=true`);
+    const recent_data = await fetch(`${sPath}/api/v2/videos/release`);
     const recent = await recent_data.json();
     return { props: { recent: recent.results } };
 }
